@@ -20,16 +20,18 @@ export const Accordion: React.FC<AccordionProps> = ({ items }) => {
   }
 
   const renderedItems = items.map((item, index) => {
+    const isActive = activeIndex === index ? "active" : ""
+
     return (
       <React.Fragment key={item.title}>
         <div 
-          className="title active"
+          className={`title ${isActive}`}
           onClick={() => onTitleClick(index)}
         >
           <i className="dropdown icon"></i>
           {item.title}
         </div>
-        <div className={`content ${activeIndex === index ? "active" : "deactive"}`}>
+        <div className={`content ${isActive}`}>
           <p>{item.content}</p>
         </div>
       </React.Fragment>
