@@ -1,23 +1,34 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
-interface SelectedType {
-  label: string,
+export interface SelectedType {
+  label: string
   value: string
 }
 
 interface DropdownProps {
-  selected: SelectedType,
-  onSelectedChange: Dispatch<SetStateAction<SelectedType>>,
-  options: Array<SelectedType>,
+  label: string
+  selected: SelectedType
+  onSelectedChange: Dispatch<SetStateAction<SelectedType>>
+  options: Array<SelectedType>
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ options, selected, onSelectedChange }) => {
+export const Dropdown: React.FC<DropdownProps> = ({ options, selected, onSelectedChange, label }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const ref = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
-    document.body.addEventListener('click', () => {
+    const onBodyClick = (event: any) => {
+      if (ref.current && ref.current.contains(event.target)){
+        return
+      }
       setOpen(false)
-    }, { capture: true })
+    }
+
+    document.body.addEventListener('click', onBodyClick, { capture: true })
+
+    return () => {
+      document.body.removeEventListener('click', onBodyClick)
+    }
   }, [])
 
   const renderedOptions = options.map((option) => {
@@ -33,9 +44,9 @@ export const Dropdown: React.FC<DropdownProps> = ({ options, selected, onSelecte
   })
 
   return (
-    <div className="ui form">
+    <div ref={ref} className="ui form">
       <div className="field">
-        <label className="label">Select a Color</label>
+        <label className="label">{label}</label>
         <div className={`ui selection dropdown ${open ? 'visible active' : ''}`} onClick={() => setOpen(!open)}>
           <i className="dropdown icon"></i>
           <div className="text">{selected.label}</div>
