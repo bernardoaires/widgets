@@ -57,7 +57,7 @@ export const Search: React.FC = () => {
     <div>
       <div className="ui form">
         <div className="field">
-          <label>Enter Search Term</label>
+          <label>Search Wikipedia</label>
           <input onChange={(e) => setTerm(e.target.value)} value={term} className="input" />
         </div>
       </div>
